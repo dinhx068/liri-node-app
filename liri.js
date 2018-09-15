@@ -4,7 +4,7 @@ var fs = require('fs');
 // Did this so user input does not fail on uppercase
 var lowerCase = require('lower-case');
 
-var request = require("request");;
+var request = require("request");
 
 var command = lowerCase(process.argv[2]);
 var search = lowerCase(process.argv[3]);
