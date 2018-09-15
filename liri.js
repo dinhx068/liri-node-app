@@ -2,7 +2,8 @@ require('dotenv').config();
 
 var fs = require('fs');
 // Did this so user input does not fail on uppercase
-var lowerCase = require('lower-case')
+var lowerCase = require('lower-case');
+var request = require("request");;
 
 var command = lowerCase(process.argv[2]);
 var search = lowerCase(process.argv[3]);
@@ -95,8 +96,17 @@ function spotifyThis() {
 
 }
 
-function movieThis() {
+function movieThis(search) {
+    // Then run a request to the OMDB API with the movie specified
+    request(`http://www.omdbapi.com/?t=${search}&y=&plot=short&apikey=trilogy`, function(error, response, body) {
 
+        // If the request is successful (i.e. if the response status code is 200)
+        if (!error && response.statusCode === 200) {
+  
+        console.log("The movie's rating is: " + JSON.parse(body).Year);
+    }
+  });
+  
 }
 
 function doThis() {
