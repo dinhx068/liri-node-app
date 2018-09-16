@@ -1,6 +1,6 @@
 node_modules
-
 .env
+.vscode
 
 
 # Folder view configuration files

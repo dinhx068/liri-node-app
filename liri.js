@@ -7,7 +7,7 @@ var lowerCase = require('lower-case');
 var request = require("request");
 
 var command = lowerCase(process.argv[2]);
-var search = lowerCase(process.argv[3]);
+var search = lowerCase(process.argv.slice(3).join(' '));
 
 /** https://gist.github.com/hurjas/2660489
  * Return a timestamp with the format "m/d/yy h:MM:ss TT"
@@ -52,7 +52,6 @@ function addToLog(command, search) {
             return console.log(err);
         }
     });
-    console.log('log success');
 }
 
 function concertThis(artist) {
@@ -88,11 +87,17 @@ function movieThis(search) {
 
         // If the request is successful (i.e. if the response status code is 200)
         if (!error && response.statusCode === 200) {
-  
-        console.log("The movie's rating is: " + JSON.parse(body).Year);
-    }
-  });
-  
+            var data = JSON.parse(body);
+            console.log('\n' + 'Title: ' + data.Title);
+            console.log('  Release year: ' + data.Year);
+            console.log('  IMBD rating: ' + data.imdbRating);
+            console.log('  Rotten Tomatoes rating: ' + data.Ratings[1].Value);
+            console.log('  Country where the movie was produced: ' + data.Country);
+            console.log('  Language: ' + data.Language);
+            console.log('  Synopsis: ' + data.Plot);
+            console.log('  Actors: ' + data.Actors + '\n');
+        }
+    });
 }
 
 function doThis() {
@@ -109,18 +114,18 @@ switch (command) {
         addToLog('spotify-this-song', search);
         break;
     case 'movie-this':
-        movieThis();
-        addToLog('movie-this');
+        movieThis(search);
+        addToLog('movie-this', search);
         break;
     case 'do-what-it-says':
         doThis();
         addToLog('do-what-it-says', search);
         break;
     default:
-        console.log('Sorry, command was not found.');
-        console.log('Enter "node liri.js" then one of the following below (artist/movie name in Quotes!):')
+        console.log('\nSorry, command was not found.');
+        console.log('Enter "node liri.js" then one of the following below:')
         console.log('  concert-this "artist/band name here"');
         console.log('  movie-this "movie name here"');
-        console.log('  do-what-it-says');
+        console.log('  do-what-it-says\n');
         addToLog(command, search);
 }
